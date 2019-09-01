@@ -21,6 +21,30 @@
         <h1 class="text">Visao Computacional</h1>
         <p class="text">Reposta do Python com a Imagem</p>
 
+        <!-- <img src="/static/Logotipo.png" alt="Logotipo"> -->
+
+        <div>
+            <h3 class="text">
+                Google Vision API
+            </h3>
+            <div class="text" >
+                {% for e in rostos %}
+                    ROSTO: {{e.id}} <br>
+                    FELIZ: {{e.feliz}} <br>
+                    RAIVA: {{e.raiva}} <br>
+                    TRISTE: {{e.triste}} <br>
+                    SURPRESO: {{e.surpreso}} <br>
+                    LOCALIZACAO DO ROSTO NA IMAGEM: {{e.vertices}} <br>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div>
+            <h3 class="text" >
+                OpenCV
+            </h3>
+        </div>
+
     </body>
 
 </html>
