@@ -21,7 +21,13 @@
         <h1 class="text">Visao Computacional</h1>
         <p class="text">Reposta do Python com a Imagem</p>
 
-        <!-- <img src="/static/Logotipo.png" alt="Logotipo"> -->
+        <div>
+            <h3 class="text" >
+                OpenCV
+            </h3>
+            <img src="/static/{{imagem}}" alt="Logotipo">
+        </div>
+
 
         <div>
             <h3 class="text">
@@ -34,15 +40,9 @@
                     RAIVA: {{e.raiva}} <br>
                     TRISTE: {{e.triste}} <br>
                     SURPRESO: {{e.surpreso}} <br>
-                    LOCALIZACAO DO ROSTO NA IMAGEM: {{e.vertices}} <br>
+                    LOCALIZACAO DO ROSTO NA IMAGEM: {{e.vertices}} <br> <br> <br>
                 {% endfor %}
             </div>
-        </div>
-
-        <div>
-            <h3 class="text" >
-                OpenCV
-            </h3>
         </div>
 
     </body>

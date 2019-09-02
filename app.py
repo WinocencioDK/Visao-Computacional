@@ -1,5 +1,7 @@
 import os , io
 import urllib.request
+import numpy as np
+import cv2 as cv
 from face import Face
 from flask import Flask, render_template , flash, request
 from google.cloud import vision
@@ -7,7 +9,8 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="client_secrets.json"
-UPLOAD_FOLDER = '/home/willian/'
+STATIC = '/home/willian/Documentos/Python Visao Computacional/Visao-Computacional/static/'
+UPLOAD_FOLDER = '/home/willian/Documentos/'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -19,6 +22,7 @@ def index():
 @app.route('/renderImage' ,  methods=['POST'])
 def renderImage():
 
+    #Google Vision API
     client = vision.ImageAnnotatorClient()
 
     if request.method == 'POST':
@@ -33,10 +37,8 @@ def renderImage():
         response = client.face_detection(image=image)
         faces = response.face_annotations
 
-        # Names of likelihood from google.cloud.vision.enums
         likelihood_name = ('DESCONHECIDO', 'MUITO_IMPROVAVEL', 'IMPROVAVEL', 'POSSIVEL',
                         'PROVAVEL', 'MUITO_PROVAVEL')
-        
         
         rostos = []
         i = 1
@@ -49,7 +51,17 @@ def renderImage():
             rostos.append(rosto)
             i = i + 1
 
-    return render_template('resposta.html', rostos=rostos)
+        #OPEN CV
+        face_classifier = cv.CascadeClassifier( cv.data.haarcascades +  'haarcascade_frontalface_default.xml')
+        image = cv.imread(UPLOAD_FOLDER + file.filename)
+        image_gray = cv.cvtColor(image,cv.COLOR_BGR2GRAY)
+        faces = face_classifier.detectMultiScale(image_gray)
+        for(x,y,w,h) in faces:
+            cv.rectangle(image,(x,y),(x+w,y+h),(255,0,0),2)
+
+        cv.imwrite(os.path.join(STATIC , file.filename), image)
+
+    return render_template('resposta.html', rostos=rostos,imagem=file.filename)
 
 if __name__ == '__main__':
     app.run(host='192.168.0.8', port=3001)
